@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Боевой турнир v1.0</title>
+
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	
+	<div id="app">
+		<div class="container" v-cloak>
+			<div class="top">
+				<div class="whiteBox controls">
+					<button
+						@click="hireWarriors"
+						v-text="warriors.length == 0 ? 'Набрать '+maxWarriors+' бойцов' : 'Перенабрать '+maxWarriors+' бойцов'"
+					></button>
+					<button
+						v-show="warriors.length > 0"
+						@click="makeTournamentList"
+						v-text="tournamentList.length == 0 ? 'Сформировать турнирную таблицу' : 'Переформировать турнирную таблицу'"
+					></button>
+					<button
+						v-show="showButton"
+						@click="makeOneFight"
+					>Провести один бой</button>
+					<button
+						v-show="showButton"
+						@click="makeTournament"
+					>Провести турнир</button>
+				</div>
+				<div class="whiteBox info">
+					<h2>Настройки</h2>
+					<div class="row">
+						<span class="title">Dev mode:</span>
+						<span class="value" v-text="devMode ? 'Включен' : 'Выключен'"></span>
+					</div>
+					<div class="row">
+						<span class="title">Всего бойцов:</span>
+						<span class="value">{{warriors.length}}</span>
+					</div>
+					<div class="row">
+						<span class="title">Восстановление жизней после боя:</span>
+						<span class="value">
+							<input type="checkbox" v-model="regenerateHP">
+						</span>
+					</div>
+				</div>
+				<div class="whiteBox countWarriors">
+					<h2>Количество бойцов</h2>
+					<label>
+						<span>2</span>
+						<input @change="hireWarriors" type="radio" id="one" value="2" v-model="maxWarriors">
+					</label>
+					<label>
+						<span>4</span>
+						<input @change="hireWarriors" type="radio" id="one" value="4" v-model="maxWarriors">
+					</label>
+					<label>
+						<span>8</span>
+						<input @change="hireWarriors" type="radio" id="one" value="8" v-model="maxWarriors">
+					</label>
+					<label>
+						<span>16</span>
+						<input @change="hireWarriors" type="radio" id="one" value="16" v-model="maxWarriors">
+					</label>
+					<label>
+						<span>32</span>
+						<input @change="hireWarriors" type="radio" id="one" value="32" v-model="maxWarriors">
+					</label>
+					<label>
+						<span>64</span>
+						<input @change="hireWarriors" type="radio" id="one" value="64" v-model="maxWarriors">
+					</label>
+				</div>
+			</div>
+			<ul class="warriors_list">
+				<li 
+					class="warrior_unit"
+					v-for="(warrior, i) in warriors"
+					:key="warrior.id"
+				>
+					<div class="box">
+						<span class="number">{{warrior.id}}</span>
+						<span class="attack">{{warrior.attack}}</span>
+						<span class="defence">{{warrior.defence}}</span>
+						<span class="health"><b>{{warrior.health}}</b></span>
+						<div class="healthBar">
+							<i :style="{width: warriorHealthPoints(warrior)}"></i>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<div class="whiteBox tournamentTable">
+				<h2>Турнирная таблица</h2>
+				<div 
+					v-if="tournamentList.length"
+					class="stages"
+				>
+					<ul 
+						class="stage"
+						v-for="(stage,i) in tournamentListText"
+						:style="{marginTop: stageMargin(i)}"
+					>
+						<li 
+							v-for="(warrior,j) in stage"
+							:style="{marginTop: warriorMargin(i,j)}"
+						>
+							<i class="before"></i>
+							<i 
+								class="lineBefore"
+								:style="{height: lineBefore(i)}"
+							></i>
+							<i class="after"></i>
+							<span class="text" v-text="warrior"></span>
+						</li>
+					</ul>
+				</div>
+				<span v-else>Турнирная таблица пока не сформирована</span>
+			</div>
+		</div>
+	</div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
